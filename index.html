@@ -5,6 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Eco Wheels - Electric Bike Rentals</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    #locationInput {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -25,35 +68,34 @@
 
   <section id="rentals" class="rentals">
     <h2>Our Fleet</h2>
-    <p>Choose from a variety of Ather electric scooters suitable for every ride – from short city commutes to longer journeys.</p>
+    <p>Choose from a variety of Ather electric scooters suitable for every ride - from short city commutes to longer journeys.</p>
     <div class="bike-grid">
       <div class="bike-card">
         <img src="1.png" alt="Ather 450X">
         <h3>Ather 450X</h3>
         <p>₹300/hr | 85 km range</p>
-        <button class="btn-book">Book</button>
+        <button class="btn-book" onclick="bookVehicle('Ather 450X')">Book</button>
       </div>
       <div class="bike-card">
         <img src="2.png" alt="Ather 450S">
         <h3>Ather 450S</h3>
         <p>₹250/hr | 75 km range</p>
-        <button class="btn-book">Book</button>
+        <button class="btn-book" onclick="bookVehicle('Ather 450S')">Book</button>
       </div>
       <div class="bike-card">
         <img src="3.png" alt="Ather 450 Apex">
         <h3>Ather 450 Apex</h3>
-        <p >₹350/hr | 100 km range</p>
-        <button class="btn-book">Book</button>
+        <p>₹350/hr | 100 km range</p>
+        <button class="btn-book" onclick="bookVehicle('Ather 450 Apex')">Book</button>
       </div>
       <div class="bike-card">
         <img src="1.jpg" alt="Ather Rizta">
         <h3>Ather Rizta</h3>
         <p>₹200/hr | 65 km range</p>
-        <button class="btn-book">Book</button>
+        <button class="btn-book" onclick="bookVehicle('Ather Rizta')">Book</button>
       </div>
     </div>
   </section>
-
   <section id="how-it-works" class="how-it-works">
     <h2>How It Works</h2>
     <p>Renting an electric bike with Eco Wheels is easy, fast, and convenient.</p>
@@ -95,5 +137,71 @@
   <footer>
     <p>© 2025 Eco Wheels | Made with 💚 for a greener tomorrow.</p>
   </footer>
+
+  <!-- Booking Modal -->
+  <div id="bookingModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modalTitle">Book Your Ride</h3>
+      <p id="modalMessage">Enter your drop location for <span id="vehicleName"></span>:</p>
+      <input type="text" id="locationInput" placeholder="Enter drop location">
+      <button id="confirmBooking" class="btn">Confirm Booking</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("bookingModal");
+    const vehicleNameSpan = document.getElementById("vehicleName");
+    const locationInput = document.getElementById("locationInput");
+    const confirmBtn = document.getElementById("confirmBooking");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalMessage = document.getElementById("modalMessage");
+    let currentVehicle = "";
+
+    function bookVehicle(vehicleName) {
+      currentVehicle = vehicleName;
+      vehicleNameSpan.textContent = vehicleName;
+      modal.style.display = "block";
+      locationInput.focus();
+    }
+
+    confirmBtn.onclick = function() {
+      const dropLocation = locationInput.value.trim();
+      if (dropLocation) {
+        modalTitle.textContent = "Booking Confirmed!";
+        modalMessage.innerHTML = `Your ${currentVehicle} will arrive shortly at <strong>${dropLocation}</strong>.`;
+        confirmBtn.style.display = "none";
+        locationInput.style.display = "none";
+        
+        // Reset modal after 3 seconds
+        setTimeout(() => {
+          modal.style.display = "none";
+          modalTitle.textContent = "Book Your Ride";
+          modalMessage.innerHTML = `Enter your drop location for <span id="vehicleName">${currentVehicle}</span>:`;
+          locationInput.value = "";
+          locationInput.style.display = "block";
+          confirmBtn.style.display = "block";
+        }, 3000);
+      }
+    }
+
+    // Close modal when clicking X
+    closeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        bookingModal.style.display = 'none';
+        confirmationModal.style.display = 'none';
+      });
+    });
+
+    // Close when clicking outside modal
+    window.addEventListener('click', (event) => {
+      if (event.target === bookingModal) {
+        bookingModal.style.display = 'none';
+      }
+      if (event.target === confirmationModal) {
+        confirmationModal.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
